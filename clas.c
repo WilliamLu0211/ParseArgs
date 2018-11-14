@@ -1,27 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
-char ** parse_args(char * line);
-
-
-char ** parse_args(char * line){
-  char *string3[6];
-  char ** string = malloc(sizeof(char*)*6);
-  int i =0;
-  while(i < 5){
-    string[i] = strsep(&line, " ");
-    i += 1;
+char** parse_args(char* line){
+  char** strings = calloc(6, sizeof(char*));
+  int i = 0;
+  while (line){
+    strings[i] = strsep(&line, " ");
+    i ++;
   }
-  return string;
+  strings[i] = 0;
+  return strings;
 }
 
-
 int main(){
-  char line[100] = "woah-this-is-cool";
-  char *s1 = line;
-  printf("[%s]\n", strsep( &s1, "-" ));
-  printf("[%s]\n", s1);
-  
-  printf("%s\n", parse_args("ls -a -l")[0]);
+  char line[] = "ls -a -l";
+  char ** args = parse_args( line );
+  execvp(args[0], args);
+  return 0;
 }
